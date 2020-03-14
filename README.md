@@ -1,4 +1,4 @@
-# Gaussian-Process-Regression
+# Gaussian Process Regression
 
 ## Energy Generation Prediction
 
@@ -6,6 +6,10 @@ The goal of this challenge is to accurately predict the net hourly generated ene
 
 As usual, the provided data has been corrupted with noise, and some values have been lost during their acquisition.
 
+## Solution
+
+A Gaussian Process Regression (GPR) model with Matern Kernel ($v = 5/2$) was implemented to both estimate the output and the missing values of the data.
+
 ## Acknowledgements
 
-Universidad Carlos III de Madrid, Data Processing (https://www.kaggle.com/c/uc3m-data-processing/overview/description).
+University Carlos III of Madrid, Data Processing (https://www.kaggle.com/c/uc3m-data-processing/overview/description).
