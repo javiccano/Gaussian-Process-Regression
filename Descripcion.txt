@@ -1,0 +1,36 @@
+﻿# PREPROCESADO
+
+
+
+* Tratamiento de los valores perdidos.
+
+Antes de comenzar, cabe mencionar que hemos eliminado la variable correspondiente a la quinta columna de las matrices X_train y X_test, debido a que su covarianza con las otras variables era pequeña y por lo tanto guardaba poca información sobre éstas. Además, hemos comprobado que cuando se introduce la quinta variable, aumenta el error de validación para cualquier algoritmo.
+
+Para estimar los valores perdidos (nan), hemos empleado procesos gaussianos. El procedimiento ha sido dividir la matriz de datos X_train en tres submatrices: X_train_aux, X_test_aux e y_train_aux.
+
+X_train_aux contiene las muestras X2, X3 y X4, de las cuales se conoce el valor de X1. X_test_aux contiene las muestras X2, X3 y X4 de las que NO se conoce el valor de X1 (nan). Por último, y_train_aux contiene las muestras X1 conocidas.
+
+Una vez hecha esta división, se normalizan todos los datos respecto a la media y desviación típica de los datos de X_train_aux.
+
+Con estas matrices se construye el modelo de regresión mediante procesos gaussianos, en los que hay que validar los hiperparámetros L y sigma_eps. Una vez obtenidos estos hiperperámetros se realiza la estimación de los X1 desconocidos (salida de X_test_aux).
+
+El mismo procedimiento se realiza para calcular los valores desconocidos de X_test. Por lo tanto, lo único que cambia ahora es X_test_aux, siendo las matrices X_train_aux e y_train_aux las mismas.
+
+
+# MODELO/ALGORITMO ELEGIDO
+
+El modelo que se ha elegido para realizar la estimación ha sido procesos gaussianos. Para realizar el modelo de regresión se han utilizado las matrices X_train e y_train. Para hallar los valores óptimos de L y sigma_eps se ha utilizado un proceso de validación cruzada.
+
+Primeramente, el Kernel empleado en el proceso gaussiano fue del tipo SE (Squared Exponential). A continuación se probó el Kernel Matérn para v = 5/2 y se observó que mejoraban ligeramente los resultados, por lo que lo seleccionamos como Kernel final. 
+
+Se ha utilizado el modelo de procesos gaussianos en dos ocasiones: en primer lugar, para calcular los valores desconocidos (nan) de la variable X1 en función de las matrices X_train_aux, y_train_aux y X_test_aux antes mencionadas; y en segundo lugar, para estimar la salida 'y' en función de X_train, X_test e y_train.
+
+
+# SELECCIÓN DE HIPERPARÁMETROS
+
+
+La metodología que se ha empleado es validación cruzada con 10 folds para seleccionar los hiperparámetros l y sigma_eps de los procesos gaussianos. Para encontrar los valores óptimos comenzamos probando con 10 valores separados de forma lineal dentro de un rango amplio para ambos parámetros. Después hemos ido reduciendo el rango para aquellos valores que producían menor error cuadrático medio de validación.
+
+Para hallar los valores óptimos hemos hecho una matriz cuadrada en la que cada elemento se corresponde con una sigma_eps y una l concreta. Buscando el error cuadrático medio de validación mínimo (promediado para los 10 folds) en dicha matriz, seleccionamos los valores de l y sigma_esp que originaron dicho error mínimo.
+
+
