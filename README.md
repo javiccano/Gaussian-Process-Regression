@@ -8,7 +8,7 @@ As usual, the provided data has been corrupted with noise, and some values have 
 
 ## Solution
 
-A Gaussian Process Regression (GPR) model with Matern Kernel ($v = 5/2$) was implemented to both estimate the output and the missing values of the data.
+A Gaussian Process Regression (GPR) model with a Matérn kernel (nu = 5/2) was implemented to both estimate the output and the missing values of the data.
 
 ## Acknowledgements
 
