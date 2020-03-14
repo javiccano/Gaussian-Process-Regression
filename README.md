@@ -1,6 +1,4 @@
-# Gaussian Process Regression
-
-## Energy Generation Prediction
+# Gaussian Process Regression for Energy Generation Prediction
 
 The goal of this task is to accurately predict the net hourly generated energy of a Combined Cycle Power Plant. In order to do so, five different measured variables that should be related to the output are provided. These variables are for instance the Temperature, Relative humidity among others.
 
