@@ -1,36 +1,34 @@
-﻿# PREPROCESADO
+# PRE-PROCESSING
 
 
+* Processing of missing values
 
-* Tratamiento de los valores perdidos.
+Before starting, it is worth mentioning that we removed the variable corresponding to the fifth column (feature) of the X_train and X_test matrices, because its covariance with respect to the other features was small and therefore, it kept little information about the problem. In addition, we verified that when the fifth variable is used, the validation error for any algorithm increases.
 
-Antes de comenzar, cabe mencionar que hemos eliminado la variable correspondiente a la quinta columna de las matrices X_train y X_test, debido a que su covarianza con las otras variables era pequeña y por lo tanto guardaba poca información sobre éstas. Además, hemos comprobado que cuando se introduce la quinta variable, aumenta el error de validación para cualquier algoritmo.
+To estimate the missing values (nan), we used Gaussian Process Regression. The procedure divided the X_train data matrix into three sub-matrices: X_train_aux, X_test_aux and y_train_aux.
 
-Para estimar los valores perdidos (nan), hemos empleado procesos gaussianos. El procedimiento ha sido dividir la matriz de datos X_train en tres submatrices: X_train_aux, X_test_aux e y_train_aux.
+X_train_aux contains samples X2, X3 and X4, of which the value of X1 is known. X_test_aux contains samples X2, X3 and X4 for which the value of X1 (nan) is NOT known. Finally, y_train_aux contains the known X1 samples.
 
-X_train_aux contiene las muestras X2, X3 y X4, de las cuales se conoce el valor de X1. X_test_aux contiene las muestras X2, X3 y X4 de las que NO se conoce el valor de X1 (nan). Por último, y_train_aux contiene las muestras X1 conocidas.
+Once this split is made, all the data is normalized with respect to the mean and standard deviation of the X_train_aux data.
 
-Una vez hecha esta división, se normalizan todos los datos respecto a la media y desviación típica de los datos de X_train_aux.
+With these matrices, the regression model is constructed using Gaussian Process Regression, in which the hyperparameters L and sigma_eps were cross-validated. Once we optimized these hyperparameters, the estimation of the unknown X1s is performed (output of X_test_aux).
 
-Con estas matrices se construye el modelo de regresión mediante procesos gaussianos, en los que hay que validar los hiperparámetros L y sigma_eps. Una vez obtenidos estos hiperperámetros se realiza la estimación de los X1 desconocidos (salida de X_test_aux).
-
-El mismo procedimiento se realiza para calcular los valores desconocidos de X_test. Por lo tanto, lo único que cambia ahora es X_test_aux, siendo las matrices X_train_aux e y_train_aux las mismas.
-
-
-# MODELO/ALGORITMO ELEGIDO
-
-El modelo que se ha elegido para realizar la estimación ha sido procesos gaussianos. Para realizar el modelo de regresión se han utilizado las matrices X_train e y_train. Para hallar los valores óptimos de L y sigma_eps se ha utilizado un proceso de validación cruzada.
-
-Primeramente, el Kernel empleado en el proceso gaussiano fue del tipo SE (Squared Exponential). A continuación se probó el Kernel Matérn para v = 5/2 y se observó que mejoraban ligeramente los resultados, por lo que lo seleccionamos como Kernel final. 
-
-Se ha utilizado el modelo de procesos gaussianos en dos ocasiones: en primer lugar, para calcular los valores desconocidos (nan) de la variable X1 en función de las matrices X_train_aux, y_train_aux y X_test_aux antes mencionadas; y en segundo lugar, para estimar la salida 'y' en función de X_train, X_test e y_train.
+The same procedure is performed to calculate the unknown values of X_test. Therefore, the only thing that changes now is X_test_aux, with the matrices X_train_aux and y_train_aux being the same.
 
 
-# SELECCIÓN DE HIPERPARÁMETROS
+# MODEL / ALGORITHM CHOSEN
+
+The model that was chosen to make the predictions was, once again, Gaussian Processes Regression. To perform the regression model, the X_train and y_train matrices were used. To find the optimal values of L and sigma_eps, a cross-validation procedure was used.
+
+First, the Kernel used in the Gaussian Process was the SE (Squared Exponential) type. Next, the Kernel Matérn was tested for v = 5/2 and we realized that the results improved slightly, so we selected it as the final Kernel.
+
+The Gaussian Process model has been used twice: first, to calculate the unknown values (nan) of the variable X1 based on the matrices X_train_aux, y_train_aux and X_test_aux before; and secondly, to estimate the output 'y' based on X_train, X_test and y_train.
 
 
-La metodología que se ha empleado es validación cruzada con 10 folds para seleccionar los hiperparámetros l y sigma_eps de los procesos gaussianos. Para encontrar los valores óptimos comenzamos probando con 10 valores separados de forma lineal dentro de un rango amplio para ambos parámetros. Después hemos ido reduciendo el rango para aquellos valores que producían menor error cuadrático medio de validación.
+# SELECTION OF HYPERPARAMETERS
 
-Para hallar los valores óptimos hemos hecho una matriz cuadrada en la que cada elemento se corresponde con una sigma_eps y una l concreta. Buscando el error cuadrático medio de validación mínimo (promediado para los 10 folds) en dicha matriz, seleccionamos los valores de l y sigma_esp que originaron dicho error mínimo.
 
+The methodology that was used to select the hyperparameters and sigma_eps of the Gaussian Processes was 10-fold cross-validation. To find the optimal values we start by testing 10 linearly separated values within a wide range for both parameters (exploration). Then we reduced the range for those values that produced the least root mean square of validation (explotation).
+
+To find the optimal values we defined a square matrix in which each element corresponds to a sigma_eps and a specific L. By searching for the minimum root mean square error (averaged over the 10 folds) in the aforesaid matrix, we selected the values of L and sigma_eps that originated said minimum error.
 
